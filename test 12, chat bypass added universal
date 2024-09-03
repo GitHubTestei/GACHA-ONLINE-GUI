@@ -1,0 +1,129 @@
+-- Load the library
+local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/cueshut/saves/main/criminality%20paste%20ui%20library'))()
+
+-- // Window \\ --
+local window = library.new('Gacha Troll GUI - 12slash25 on scriptblox / GachaOnlineScripter', 'Les go')
+
+-- // Tabs \\ --
+local tab = window.new_tab('rbxassetid://4483345998')
+local tab2 = window.new_tab('rbxassetid://4483345998')
+local tab3 = window.new_tab('rbxassetid://4483345998')
+local tab4 = window.new_tab('rbxassetid://4483345998')
+
+-- // Sections \\ --
+local section = tab.new_section('Character')
+local section2 = tab2.new_section('Items')
+local section3 = tab3.new_section('Universal')
+local section4 = tab4.new_section('Annoy')
+
+-- // Sector \\ --
+local sector = section.new_sector('Make character rainbow you cant see but others can', 'Left')
+local sector2 = section2.new_sector('Spam drop prop', 'Left')
+local sector3 = section3.new_sector('Infinite Yield Admin', 'Left')
+local sector3 = section3.new_sector('Chat Bypass button', 'Right')
+local sector4 = section4.new_sector('Spam give and throw props', 'Left')
+
+-- // Elements \\ -- (Type, Name, State, Callback)
+local button = sector.element('Button', 'Button', nil, function()
+   -- Function to load and execute a script from a URL
+local function executeScript(url)
+    local success, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    if not success then
+        warn("Failed to load or execute script from " .. url .. ": " .. result)
+    end
+end
+
+-- Function to execute scripts with a delay between each
+local function executeScriptsWithDelay(urls, delay)
+    for _, url in ipairs(urls) do
+        spawn(function()
+            executeScript(url)
+        end)
+        wait(delay)  -- Wait for the specified delay before executing the next script
+    end
+end
+
+-- URLs of the scripts to be executed
+local urls = {
+    "https://pastebin.com/raw/RUyAFsD8",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/rainbowfinalfinale6"
+}
+
+-- Execute scripts with a 0.1 second delay between each
+executeScriptsWithDelay(urls, 0.1)
+end)
+
+local button2 = sector2.element('Button', 'Button', nil, function()
+   while true do
+  local dropCount = 2
+  
+  for i = 1, dropCount do
+    local args = {
+      [1] = {
+        ["itemId"] = 15946
+      }
+    }
+  
+    game:GetService("ReplicatedStorage"):WaitForChild("AskDoPlayerDropItem"):FireServer(unpack(args))
+  
+    local args = {
+      [1] = "Prop",
+      [2] = 1,
+      [3] = true,
+      [4] = true
+    }
+  
+    game:GetService("ReplicatedStorage"):WaitForChild("ChangeAssetEvent"):FireServer(unpack(args))
+  
+    local args = {
+      [1] = "Prop",
+      [2] = 15946
+    }
+  
+    game:GetService("ReplicatedStorage"):WaitForChild("ChangeAssetEvent"):FireServer(unpack(args))
+  end
+  
+  wait(0.0001)
+end
+end)
+
+local button3 = sector3.element('Button', 'Button', nil, function()
+   loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+end)
+
+local button4 = sector4.element('Button', 'Button', nil, function()
+   local function executeScript(url)
+    local success, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    if not success then
+        warn("Failed to load or execute script from " .. url .. ": " .. result)
+    end
+end
+
+-- Function to execute scripts with a delay between each
+local function executeScriptsWithDelay(urls, delay)
+    for _, url in ipairs(urls) do
+        spawn(function()
+            executeScript(url)
+        end)
+        wait(delay)  -- Wait for the specified delay before executing the next script
+    end
+end
+
+-- URLs of the scripts to be executed
+local urls = {
+    "https://pastebin.com/raw/i43jdREj",
+    "https://pastebin.com/raw/EKMapTpN"
+}
+
+-- Execute scripts with a 0.1 second delay between each
+executeScriptsWithDelay(urls, 0.1)
+end)
+
+local button3 = sector3.element('Button', 'Button', nil, function()
+   loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua"))()
+
+end)
