@@ -1,0 +1,9 @@
+while true do
+local args={
+  [1]="RPDesc",
+  [2]="12slash25 / GachaOnlineScripter"
+}
+ 
+game:GetService("ReplicatedStorage").ServerFilterText:InvokeServer(unpack(args))
+wait(60)
+end
