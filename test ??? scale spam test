@@ -1,0 +1,38 @@
+ while true do
+local args = {
+  [1] = 1.25,
+  [2] = {
+    [1] = "backHand",
+    [2] = "leftFoot",
+    [3] = "head",
+    [4] = "torso",
+    [5] = "leftHand",
+    [6] = "backArm",
+    [7] = "leftArm",
+    [8] = "rightLeg",
+    [9] = "rightFoot",
+    [10] = "leftLeg"
+  }
+}
+
+game:GetService("ReplicatedStorage").AskChangeBodyScale:FireServer(unpack(args))
+wait(0.001)
+local args = {
+  [1] = 0.6,
+  [2] = {
+    [1] = "backHand",
+    [2] = "leftFoot",
+    [3] = "head",
+    [4] = "torso",
+    [5] = "leftHand",
+    [6] = "backArm",
+    [7] = "leftArm",
+    [8] = "rightLeg",
+    [9] = "rightFoot",
+    [10] = "leftLeg"
+  }
+}
+
+game:GetService("ReplicatedStorage").AskChangeBodyScale:FireServer(unpack(args))
+ wait(0.001)
+ end
