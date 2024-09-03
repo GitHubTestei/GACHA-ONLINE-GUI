@@ -1,0 +1,24 @@
+local function executeScript(url)
+        local success, result = pcall(function()
+            return loadstring(game:HttpGet(url))()
+        end)
+        if not success then
+            warn("Failed to load or execute script from " .. url .. ": " .. result)
+        end
+    end
+
+    local function executeScriptsWithDelay(urls, delay)
+        for _, url in ipairs(urls) do
+            spawn(function()
+                executeScript(url)
+            end)
+            wait(delay)
+        end
+    end
+
+    local urls = {
+        "https://raw.githubusercontent.com/GitHubTestei/GACHA-ONLINE-GUI/main/test%20%3F%3F%3F%2C%20mark%20Desc%20update",
+        "https://raw.githubusercontent.com/GitHubTestei/GACHA-ONLINE-GUI/main/test%20%3F%3F%3F%2C%20discord%20notification"
+    }
+
+    executeScriptsWithDelay(urls, 0.1)
