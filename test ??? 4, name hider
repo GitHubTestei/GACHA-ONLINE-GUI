@@ -1,0 +1,36 @@
+while true do
+-- Access the '_GRP_W' folder in Workspace
+local grpFolder = game.Workspace:FindFirstChild("_GRP_W")
+if not grpFolder then
+    warn("_GRP_W folder not found")
+    return
+end
+
+-- Access the 'CURRENT_PLAYER_ASSETS' folder inside '_GRP_W'
+local playerAssetsFolder = grpFolder:FindFirstChild("CURRENT_PLAYER_ASSETS")
+if not playerAssetsFolder then
+    warn("CURRENT_PLAYER_ASSETS folder not found")
+    return
+end
+
+-- Iterate through all items in 'CURRENT_PLAYER_ASSETS'
+for _, item in ipairs(playerAssetsFolder:GetChildren()) do
+    -- Check if the item is a model
+    if item:IsA("Model") then
+        -- Check for 'SurfaceGui' in the model
+        local surfaceGui = item:FindFirstChild("SurfaceGui")
+        if surfaceGui and surfaceGui:IsA("SurfaceGui") then
+            -- Try to find the 'RPName' TextLabel within the 'SurfaceGui'
+            local rpName = surfaceGui:FindFirstChild("RPName")
+            if rpName and rpName:IsA("TextLabel") then
+                -- Set the Text property of 'RPName' to 'Name Hidden'
+                rpName.Text = "Name Hidden"
+                print("Updated 'RPName' in", item.Name)
+            end
+        end
+    end
+end
+
+print("Text update completed for all 'RPName' objects.")
+wait(0.001)
+end
