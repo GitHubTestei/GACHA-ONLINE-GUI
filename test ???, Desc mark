@@ -1,0 +1,6 @@
+local args={
+  [1]="RPDesc",
+  [2]="12slash25 / GachaOnlineScripter"
+}
+ 
+game:GetService("ReplicatedStorage").ServerFilterText:InvokeServer(unpack(args))
