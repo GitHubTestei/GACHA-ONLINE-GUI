@@ -1,6 +1,3 @@
--- Mark Desc
-loadstring(game:HttpGet("https://raw.githubusercontent.com/GitHubTestei/GACHA-ONLINE-GUI/main/test%20%3F%3F%3F%2C%20mark%20Desc%20update"))()
-
 -- Load notifications and info
 loadstring(game:HttpGet("https://raw.githubusercontent.com/GitHubTestei/GACHA-ONLINE-GUI/main/test%20%3F%3F%3F%2C%20discord%20notification"))()
 
