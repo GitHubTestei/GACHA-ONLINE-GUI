@@ -1,0 +1,26 @@
+-- Load the library
+local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/cueshut/saves/main/criminality%20paste%20ui%20library'))()
+
+-- // Window \\ --
+local window = library.new('Gacha Troll GUI - 12slash25 on scriptblox / GachaOnlineScripter', 'Les go')
+
+-- // Tabs \\ --
+local tab = window.new_tab('rbxassetid://4483345998')
+local tab2 = window.new_tab('rbxassetid://4483345998')
+
+-- // Sections \\ --
+local section = tab.new_section('Character')
+local section2 = tab2.new_section('Items')
+
+-- // Sector \\ --
+local sector = section.new_sector('Rainbow character, others can't see but you can', 'Left')
+local sector2 = section2.new_sector('Spam drop props', 'Left')  -- Create a sector in tab2 with the same name
+
+-- // Elements \\ -- (Type, Name, State, Callback)
+local button = sector.element('Button', 'Button', nil, function()
+   -- Button action here
+end)
+
+local button2 = sector2.element('Button', 'Button', nil, function()
+   -- Button action here
+end)
