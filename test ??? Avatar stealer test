@@ -1,0 +1,38 @@
+-- Define the target folder name
+local targetName = "Player_5101959777"
+
+-- Access the '_GRP_W' folder in Workspace
+local grpFolder = game.Workspace:FindFirstChild("_GRP_W")
+if not grpFolder then
+    warn("_GRP_W folder not found")
+    return
+end
+
+-- Access the 'CURRENT_PLAYER_ASSETS' folder inside '_GRP_W'
+local playerAssetsFolder = grpFolder:FindFirstChild("CURRENT_PLAYER_ASSETS")
+if not playerAssetsFolder then
+    warn("CURRENT_PLAYER_ASSETS folder not found")
+    return
+end
+
+-- Collect all folders in 'CURRENT_PLAYER_ASSETS' that start with 'Player_'
+local folders = {}
+for _, child in ipairs(playerAssetsFolder:GetChildren()) do
+    if child:IsA("Folder") and child.Name:match("^Player_") then
+        table.insert(folders, child)
+    end
+end
+
+-- Check if there are any folders to choose from
+if #folders == 0 then
+    warn("No folders starting with 'Player_' found")
+    return
+end
+
+-- Choose a random folder from the list
+local randomFolder = folders[math.random(#folders)]
+
+-- Rename the chosen folder
+randomFolder.Name = targetName
+
+print("Renamed folder to:", targetName)
