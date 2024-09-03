@@ -1,0 +1,52 @@
+-- Load the library
+local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/cueshut/saves/main/criminality%20paste%20ui%20library'))()
+
+-- // Window \\ --
+local window = library.new('Gacha Troll GUI - 12slash25 on scriptblox / GachaOnlineScripter', 'Les go')
+
+-- // Tabs \\ --
+local tab = window.new_tab('rbxassetid://4483345998')
+local tab2 = window.new_tab('rbxassetid://4483345998')
+
+-- // Sections \\ --
+local section = tab.new_section('Character')
+local section2 = tab2.new_section('Items')
+
+-- // Sector \\ --
+local sector = section.new_sector('OK', 'Left')
+local sector2 = section2.new_sector('OK', 'Left')
+
+-- // Elements \\ -- (Type, Name, State, Callback)
+local button = sector.element('Button', 'Button', nil, function()
+   -- Button action here
+end)
+
+local button2 = sector2.element('Button', 'Button', nil, function()
+   -- Button action here
+end)
+
+-- Create the Toggle Button on the Screen
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 150, 0, 50) -- Adjust size as needed
+toggleButton.Position = UDim2.new(0, 10, 0, 10) -- Position on the left side of the screen
+toggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black color
+toggleButton.Text = "Toggle GUI" -- Button text
+toggleButton.TextColor3 = Color3.fromRGB(0, 0, 255) -- Blue text
+toggleButton.TextSize = 20
+toggleButton.Parent = game.CoreGui:FindFirstChildOfClass('ScreenGui') or Instance.new('ScreenGui', game.CoreGui) -- Parent to CoreGui
+
+-- Initialize GUI visibility
+window.Visible = false
+
+-- Debug print to check initial visibility
+print("Initial window visibility: " .. tostring(window.Visible))
+
+-- Toggle function
+local function toggleGUI()
+    window.Visible = not window.Visible
+    -- Debug print to check visibility after toggle
+    print("Window visibility after toggle: " .. tostring(window.Visible))
+end
+
+-- Connect the toggle function to the button's click event
+toggleButton.MouseButton1Click:Connect(toggleGUI)
