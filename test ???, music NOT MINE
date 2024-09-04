@@ -1,0 +1,172 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+--- OPEN SOURCE 🔓 
+--- Credits to ToolsNChips AI & CokeAndChipsScripts!
+--- No loading screen cause yeah.
+--- If your gonna skid credit me, thanks.
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "MusicHubGui"
+gui.Parent = playerGui
+
+-- Function to set up the main GUI
+local function setupMainGui()
+    -- Main frame
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Size = UDim2.new(0.7, 0, 0.75, 0)
+    mainFrame.Position = UDim2.new(0.15, 0, 0.15, 0)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    mainFrame.Parent = gui
+
+    -- Title
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 0.15, 0)
+    title.Position = UDim2.new(0, 0, 0, 0)
+    title.Text = "Music Hub 🎶"
+    title.TextColor3 = Color3.fromRGB(0, 0, 0)
+    title.TextScaled = true
+    title.BackgroundTransparency = 1
+    title.Parent = mainFrame
+
+    -- Tabs
+    local phonkTab = Instance.new("Frame")
+    phonkTab.Size = UDim2.new(1, -20, 0.6, -20)
+    phonkTab.Position = UDim2.new(0, 10, 0.15, 10)
+    phonkTab.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+    phonkTab.Parent = mainFrame
+
+    -- Phonk buttons
+    local buttonNames = {"Phonk no.1", "Phonk no.2", "Phonk no.3", "Phonk no.4", "Chill Music No.1", "Chill Music No.2", "Chill Music No.3"}
+    local audioIds = {
+        "rbxassetid://17422074849",
+        "rbxassetid://14145620741",
+        "rbxassetid://14145627144",
+        "rbxassetid://18841894272",
+        "rbxassetid://9046863579",
+        "rbxassetid://9043887091",
+        "rbxassetid://9046863253"
+    }
+    local activeSound = nil
+    local isLooping = false
+
+    local buttonHeight = 0.1
+    local spacing = 0.02
+
+    for i, name in ipairs(buttonNames) do
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(1, -10, buttonHeight, 0)
+        btn.Position = UDim2.new(0, 5, (i - 1) * (buttonHeight + spacing), 5)
+        btn.Text = name
+        btn.TextColor3 = Color3.fromRGB(0, 0, 0)
+        btn.TextScaled = true
+        btn.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+        btn.Parent = phonkTab
+
+        btn.MouseButton1Click:Connect(function()
+            if activeSound then
+                activeSound:Stop()
+            end
+            activeSound = Instance.new("Sound")
+            activeSound.SoundId = audioIds[i]
+            activeSound.Parent = game.Workspace
+            activeSound.Ended:Connect(function()
+                if isLooping then
+                    activeSound:Play()
+                end
+            end)
+            activeSound:Play()
+        end)
+    end
+
+    -- Stop Music button
+    local stopMusicBtn = Instance.new("TextButton")
+    stopMusicBtn.Size = UDim2.new(0.3, 0, 0.1, 0)
+    stopMusicBtn.Position = UDim2.new(0.05, 0, 0.75, 0)
+    stopMusicBtn.Text = "Stop Music"
+    stopMusicBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    stopMusicBtn.TextScaled = true
+    stopMusicBtn.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    stopMusicBtn.Parent = mainFrame
+
+    stopMusicBtn.MouseButton1Click:Connect(function()
+        if activeSound then
+            activeSound:Stop()
+        end
+    end)
+
+    -- Loop Music button
+    local loopMusicBtn = Instance.new("TextButton")
+    loopMusicBtn.Size = UDim2.new(0.3, 0, 0.1, 0)
+    loopMusicBtn.Position = UDim2.new(0.35, 0, 0.75, 0)
+    loopMusicBtn.Text = "Loop Music"
+    loopMusicBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    loopMusicBtn.TextScaled = true
+    loopMusicBtn.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    loopMusicBtn.Parent = mainFrame
+
+    loopMusicBtn.MouseButton1Click:Connect(function()
+        isLooping = true
+    end)
+
+    -- Stop Loop button
+    local stopLoopBtn = Instance.new("TextButton")
+    stopLoopBtn.Size = UDim2.new(0.3, 0, 0.1, 0)
+    stopLoopBtn.Position = UDim2.new(0.65, 0, 0.75, 0)
+    stopLoopBtn.Text = "Stop Loop"
+    stopLoopBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    stopLoopBtn.TextScaled = true
+    stopLoopBtn.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    stopLoopBtn.Parent = mainFrame
+
+    stopLoopBtn.MouseButton1Click:Connect(function()
+        isLooping = false
+    end)
+
+    -- Toggle GUI button
+    local toggleGuiBtn = Instance.new("TextButton")
+    toggleGuiBtn.Size = UDim2.new(0.1, 0, 0.1, 0)
+    toggleGuiBtn.Position = UDim2.new(1, -50, 0, 10)
+    toggleGuiBtn.Text = "UI"
+    toggleGuiBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    toggleGuiBtn.TextScaled = true
+    toggleGuiBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    toggleGuiBtn.Parent = gui
+
+    local isVisible = true
+
+    toggleGuiBtn.MouseButton1Click:Connect(function()
+        isVisible = not isVisible
+        gui.Enabled = isVisible
+    end)
+
+    -- Credits
+    local credits = Instance.new("TextLabel")
+    credits.Size = UDim2.new(1, -10, 0.15, 0)
+    credits.Position = UDim2.new(0, 5, 0.85, 0)
+    credits.Text = "Play music while grinding, fighting, or relaxing. Enjoy Music Hub 🎶. Credits: CokeAndChipsScripts"
+    credits.TextColor3 = Color3.fromRGB(0, 0, 0)
+    credits.TextScaled = true
+    credits.BackgroundTransparency = 1
+    credits.Parent = mainFrame
+
+    -- Delete GUI button
+    local deleteGuiBtn = Instance.new("TextButton")
+    deleteGuiBtn.Size = UDim2.new(0.3, 0, 0.1, 0)
+    deleteGuiBtn.Position = UDim2.new(0.35, 0, 0.9, 0)
+    deleteGuiBtn.Text = "Delete GUI"
+    deleteGuiBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    deleteGuiBtn.TextScaled = true
+    deleteGuiBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    deleteGuiBtn.Parent = phonkTab
+
+    deleteGuiBtn.MouseButton1Click:Connect(function()
+        gui:Destroy()
+    end)
+end
+
+-- Directly create the main GUI
+setupMainGui()
