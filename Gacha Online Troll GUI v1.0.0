@@ -133,7 +133,23 @@ local button1 = sector1_left3.element('Button', 'Button', nil, function()
 end)
 
 local button2 = sector1_right4.element('Button', 'Button', nil, function()
-   loadstring(game:HttpGet("https://pastebin.com/raw/stneejRE"))()
+   while true do
+  local args={
+    [1]="idle_leanin",
+    [2]="idle"
+  }
+  
+  game:GetService("ReplicatedStorage"):WaitForChild("ServerChangeAnim"):FireServer(unpack(args))
+  wait(0.05)
+  
+  local args={
+    [1]="idle_sad",
+    [2]="idle"
+  }
+  
+  game:GetService("ReplicatedStorage"):WaitForChild("ServerChangeAnim"):FireServer(unpack(args))
+  wait(0.00001)
+end
 end)
 
 
