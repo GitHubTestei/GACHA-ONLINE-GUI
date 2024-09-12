@@ -1,0 +1,130 @@
+-- MUDE AQUI
+
+victim = game.Players["GachaOnlineScripter"]
+slot = 33
+
+-- CONSTANTES GLOBAIS
+
+replicatedStorage = game:GetService("ReplicatedStorage")
+serverPresetChange = replicatedStorage.ServerPresetChange
+serverChangeSkinColor = replicatedStorage.ServerChangeSkinColor
+
+players = game:GetService("Players")
+player = game.Players.LocalPlayer
+
+-- CLASSSES
+
+-- CLASSE PARTE DO CORPO/BodyPart
+
+BodyPart = {}
+
+function BodyPart.new(WHICH_PART : Instance)
+	local self = {}
+	
+	self.Object = WHICH_PART
+	self.Name = self.Object.Name
+	
+	self.SGui = self.Object[self.Object.Name].SurfaceGui
+	
+	self.Color = self.SGui.Color
+	self.Outline = self.SGui.Outline
+	
+	return self
+end
+
+function BodyPart.copy(COPIED_TO, COPIED_FROM)
+	COPIED_TO.Color.ImageColor3 = COPIED_FROM.Color.ImageColor3
+	COPIED_TO.Outline.ImageColor3 = COPIED_FROM.Outline.ImageColor3
+	
+	COPIED_TO.Color.ImageTransparency = COPIED_FROM.Color.ImageTransparency
+	COPIED_TO.Outline.ImageTransparency = COPIED_FROM.Outline.ImageTransparency
+end
+
+-- CLASSE PARTES DO CORPO/BodyParts
+
+BodyParts = {}
+
+function BodyParts.new(WHICH_PART : Instance)
+	local self = {}
+
+	self.Object = WHICH_PART
+	
+	self.Head = BodyPart.new(self.Object.head)
+	self.Torso = BodyPart.new(self.Object.torso)	
+	
+	self.RightLeg = BodyPart.new(self.Object.rightLeg)	
+	self.RightFoot = BodyPart.new(self.Object.rightFoot)
+	self.LeftLeg = BodyPart.new(self.Object.leftLeg)	
+	self.LeftFoot = BodyPart.new(self.Object.leftFoot)
+	
+	self.BackArm = BodyPart.new(self.Object.backArm)
+	self.BackHand = BodyPart.new(self.Object.backHand)
+	self.LeftArm = BodyPart.new(self.Object.leftArm)
+	self.LeftHand = BodyPart.new(self.Object.leftHand)
+
+	return self
+end
+
+function BodyParts.copy(COPIED_TO, COPIED_FROM)
+	BodyPart.copy(COPIED_TO.Head, COPIED_FROM.Head)	
+	BodyPart.copy(COPIED_TO.Torso, COPIED_FROM.Torso)
+	
+	BodyPart.copy(COPIED_TO.RightLeg, COPIED_FROM.RightLeg)	
+	BodyPart.copy(COPIED_TO.RightFoot, COPIED_FROM.RightFoot)
+	BodyPart.copy(COPIED_TO.LeftLeg, COPIED_FROM.LeftLeg)	
+	BodyPart.copy(COPIED_TO.LeftFoot, COPIED_FROM.LeftFoot)
+
+	BodyPart.copy(COPIED_TO.BackArm, COPIED_FROM.BackArm)	
+	BodyPart.copy(COPIED_TO.BackHand, COPIED_FROM.BackHand)
+	BodyPart.copy(COPIED_TO.LeftArm, COPIED_FROM.LeftArm)
+	BodyPart.copy(COPIED_TO.LeftHand, COPIED_FROM.LeftHand)
+end
+
+-- CLASSE PERSONAGEM VISUAL/GachaCharacter
+
+GachaCharacter = {}
+
+function GachaCharacter.new(PLAYER : Player)
+	local self = {}
+	
+	self.Object = workspace["_GRP_W"]["CURRENT_PLAYER_ASSETS"]["Player_".. PLAYER.UserId]
+	
+	-- Corpo
+	self.BodyParts = BodyParts.new(self.Object.BodyParts)
+	
+	-- Roupas
+	
+	self.Clothing = self.Object.CLOTHING
+	
+
+	return self
+end
+
+-- PREPARATIVOS
+game:GetService("Players").LocalPlayer.PlayerGui._GRP_SG.ScreenGui.Chooser.ScrollingFrame["4"]["4"].ChooserButton
+character = GachaCharacter.new(player)
+victimCharacter = GachaCharacter.new(victim)
+
+serverPresetChange:FireServer(slot)
+wait(1)
+
+-- COPIAR NO SERVER
+
+grabcolor = victimCharacter.BodyParts.Head.Color.ImageColor3
+graboutline = victimCharacter.BodyParts.Head.Outline.ImageColor3
+
+game:GetService("ReplicatedStorage"):WaitForChild("ServerChangeSkinColor"):FireServer({
+	["R"] = grabcolor.R,
+	["G"] = grabcolor.G,
+	["B"] = grabcolor.B
+})
+
+game:GetService("ReplicatedStorage"):WaitForChild("ServerChangeSkinColor"):FireServer({
+	["R"] = graboutline.R,
+	["G"] = graboutline.G,
+	["B"] = graboutline.B
+}, true)
+
+-- COPIAR LOCALMENTE
+
+BodyParts.copy(character.BodyParts, victimCharacter.BodyParts) 
