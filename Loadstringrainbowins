@@ -1,0 +1,63 @@
+-- Function to load and execute a script from a URL
+local function executeScript(url)
+    local success, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    if not success then
+        warn("Failed to load or execute script from " .. url .. ": " .. result)
+    end
+end
+
+-- Run all scripts simultaneously
+local function executeAllScripts(urls)
+    for _, url in ipairs(urls) do
+        task.spawn(function()
+            executeScript(url)
+        end)
+    end
+end
+
+-- URLs of the scripts
+local urls = {
+    "https://pastebin.com/raw/E86jtHSA",
+    "https://pastebin.com/raw/gLHQqk28",
+    "https://pastebin.com/raw/GKPB3TNj",
+    "https://pastebin.com/raw/ZhZhMifq",
+    "https://pastebin.com/raw/WwfD3F9E",
+    "https://pastebin.com/raw/2NbbPqCX",
+    "https://pastebin.com/raw/fTr3jAnY",
+    "https://pastebin.com/raw/1GVgkYms",
+    "https://pastebin.com/raw/dNU6ZUv1",
+    "https://pastebin.com/raw/Eunmw6Ax",
+    "https://pastebin.com/raw/6cEBYX57",
+    "https://pastebin.com/raw/YcZbpS8P",
+    "https://pastebin.com/raw/x6tqWdhW",
+    "https://pastebin.com/raw/d9Lf95BK",
+    "https://pastebin.com/raw/e6mEifEN",
+    "https://pastebin.com/raw/rskp8te7",
+    "https://pastebin.com/raw/QaViMSeA",
+    "https://raw.githubusercontent.com/GitHubTestei/GachaOnline/main/test1",
+    "https://raw.githubusercontent.com/GitHubTestei/GachaOnline/main/left",
+    "https://raw.githubusercontent.com/GitHubTestei/GachaOnline/main/right",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/back%20hair%20rainbow",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/front%20hair%20outline%20rainbow",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/rear%20hair%20rainbow",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/shirt%20outline%20rainbow",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/pants%20calf%201",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/pants%20calf%20o",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/pants%20thigh%201",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/pants%20thigh%20o",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/eyebrow1",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/eyebrow%20o",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/mouth%20rainbow",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/rainbow%20hair%202",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/rainbow%20hair%203",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/calfs%201%202",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/calfs%20o%202",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/back%20hairs%202",
+    "https://raw.githubusercontent.com/GitHubTestei/Yessier/main/back%20hair%20rainbow%20n"
+}
+
+-- Execute all at once
+executeAllScripts(urls)
+￼Enter file contents here
