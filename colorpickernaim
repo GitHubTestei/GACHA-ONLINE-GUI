@@ -1,0 +1,203 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerUpdateColor = ReplicatedStorage:WaitForChild("ServerUpdateColor")
+local ServerChangeSkinColor = ReplicatedStorage:WaitForChild("ServerChangeSkinColor")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Remaining parts (hats, capes, sleeves, jackets, shoes removed)
+local items = {
+    "Eyebrowsp","Eyebrowsp1","Eyebrowso","Eyebrowso1",
+    "Propo","Prope","Props","Propp",
+    "PantsThighp","PantsCalfp1","PantsThighp1","PantsCalfp",
+    "PantsThigho","PantsCalfo","PantsThigho1","PantsCalfo1",
+    "Righteyei","Lefteyei","Lefteyew","Righteyemh","Righteyew",
+    "Lefteyemh","Lefteyeb","Righteyeb",
+    "Front_Hairp","Rear_Hairp","Back_Hairo","Front_Hairo",
+    "Rear_Hairo","Rear_Hairs","Front_Hairs","Back_Hairp",
+    "Back_Hairs","Back_Haire",
+    "Moutho",
+    "Shirtp","ShirtBotp","Shirts","ShirtBots","Shirto","Shirtboto"
+}
+
+-- Toggle state
+local effectEnabled = true
+
+-- Selected colors (filled by GUI)
+local selectedColors = {}
+
+-- Fallback if nothing selected
+local fallbackColors = {
+    {R = 0, G = 0, B = 0},    -- Black
+    {R = 1, G = 1, B = 1}     -- White
+}
+
+local function getCurrentColors()
+    if #selectedColors > 0 then
+        return selectedColors
+    else
+        return fallbackColors
+    end
+end
+
+-- Instantly set everything to black when stopping
+local function setAllBlack()
+    local black = {R = 0, G = 0, B = 0}
+    for _, partName in ipairs(items) do
+        ServerUpdateColor:FireServer(partName, black)
+    end
+    ServerChangeSkinColor:FireServer(black)
+    ServerChangeSkinColor:FireServer(black, true)
+end
+
+-- Main flashing loop (3× speed)
+task.spawn(function()
+    while true do
+        if effectEnabled then
+            local colors = getCurrentColors()
+            if #colors == 0 then colors = fallbackColors end
+
+            -- Shuffle items
+            local shuffled = {}
+            for _, v in ipairs(items) do table.insert(shuffled, v) end
+            for i = #shuffled, 2, -1 do
+                local j = math.random(i)
+                shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
+            end
+
+            -- Assign random color from selected ones to each part
+            for _, partName in ipairs(shuffled) do
+                local color = colors[math.random(#colors)]
+                ServerUpdateColor:FireServer(partName, color)
+            end
+
+            -- Skin & outline also random from selected colors
+            local skinColor = colors[math.random(#colors)]
+            ServerChangeSkinColor:FireServer(skinColor)
+
+            local outlineColor = colors[math.random(#colors)]
+            ServerChangeSkinColor:FireServer(outlineColor, true)
+        end
+
+        task.wait(0.0667) -- ≈15 changes/sec (3× faster than original 0.2s)
+    end
+end)
+
+-- ==================== GUI ====================
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "ColorFlasherGUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = PlayerGui
+
+-- Toggle button (top right)
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 80, 0, 30)
+toggleButton.Position = UDim2.new(1, -90, 0, 10)
+toggleButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+toggleButton.TextColor3 = Color3.new(1,1,1)
+toggleButton.Font = Enum.Font.SourceSansBold
+toggleButton.TextSize = 16
+toggleButton.Text = "Stop"
+toggleButton.Parent = screenGui
+
+-- "Colors" button (below toggle)
+local colorsButton = Instance.new("TextButton")
+colorsButton.Size = UDim2.new(0, 80, 0, 30)
+colorsButton.Position = UDim2.new(1, -90, 0, 50)
+colorsButton.BackgroundColor3 = Color3.fromRGB(100, 100, 200)
+colorsButton.TextColor3 = Color3.new(1,1,1)
+colorsButton.Font = Enum.Font.SourceSansBold
+colorsButton.TextSize = 16
+colorsButton.Text = "Colors"
+colorsButton.Parent = screenGui
+
+-- Color picker frame (wider now)
+local colorFrame = Instance.new("Frame")
+colorFrame.Size = UDim2.new(0, 450, 0, 120)  -- Wider to fit all 14 colors in one row
+colorFrame.Position = UDim2.new(0.5, -225, 0.5, -60)
+colorFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+colorFrame.BorderSizePixel = 2
+colorFrame.BorderColor3 = Color3.fromRGB(100, 100, 100)
+colorFrame.Visible = false
+colorFrame.Parent = screenGui
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 30)
+title.BackgroundTransparency = 1
+title.Text = "Select Colors (click to toggle)"
+title.TextColor3 = Color3.new(1,1,1)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 18
+title.Parent = colorFrame
+
+-- Full color list: Rainbow + Black + White
+local colorList = {
+    Color3.fromRGB(255, 0,   0),   -- Red
+    Color3.fromRGB(255, 127, 0),   -- Orange
+    Color3.fromRGB(255, 255, 0),   -- Yellow
+    Color3.fromRGB(127, 255, 0),   -- Chartreuse
+    Color3.fromRGB(0,   255, 0),   -- Green
+    Color3.fromRGB(0,   255, 127), -- Spring Green
+    Color3.fromRGB(0,   255, 255), -- Cyan
+    Color3.fromRGB(0,   127, 255), -- Azure
+    Color3.fromRGB(0,   0,   255), -- Blue
+    Color3.fromRGB(127, 0,   255), -- Violet
+    Color3.fromRGB(255, 0,   255), -- Magenta
+    Color3.fromRGB(255, 0,   127), -- Rose
+    Color3.fromRGB(0,   0,   0),   -- Black
+    Color3.fromRGB(255, 255, 255), -- White
+}
+
+-- Create color buttons
+for i, col in ipairs(colorList) do
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 50, 0, 50)
+    btn.Position = UDim2.new(0, 20 + (i-1)*60, 0, 40)  -- All in one row, 60px spacing
+    btn.BackgroundColor3 = col
+    btn.Text = ""
+    btn.BorderSizePixel = 3
+    btn.BorderColor3 = Color3.fromRGB(200, 200, 200)
+    btn.Parent = colorFrame
+
+    -- Convert Color3 to {R,G,B} table
+    local rgbTable = {R = col.R, G = col.G, B = col.B}
+
+    -- Start with all colors selected (including black & white)
+    table.insert(selectedColors, rgbTable)
+    btn.BorderColor3 = Color3.new(1,1,0) -- yellow border = selected
+
+    btn.MouseButton1Click:Connect(function()
+        local found = false
+        for j, c in ipairs(selectedColors) do
+            if c == rgbTable then
+                table.remove(selectedColors, j)
+                btn.BorderColor3 = Color3.fromRGB(200, 200, 200)
+                found = true
+                break
+            end
+        end
+        if not found then
+            table.insert(selectedColors, rgbTable)
+            btn.BorderColor3 = Color3.new(1,1,0)
+        end
+    end)
+end
+
+-- Toggle effect
+toggleButton.MouseButton1Click:Connect(function()
+    effectEnabled = not effectEnabled
+    if effectEnabled then
+        toggleButton.Text = "Stop"
+        toggleButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+    else
+        toggleButton.Text = "Start"
+        toggleButton.BackgroundColor3 = Color3.fromRGB(150, 50, 50)
+        setAllBlack()
+    end
+end)
+
+-- Open/close color picker
+colorsButton.MouseButton1Click:Connect(function()
+    colorFrame.Visible = not colorFrame.Visible
+end)
