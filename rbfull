@@ -1,0 +1,176 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerUpdateColor = ReplicatedStorage:WaitForChild("ServerUpdateColor")
+local ServerChangeSkinColor = ReplicatedStorage:WaitForChild("ServerChangeSkinColor")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- rainbow color sequence
+local colors = {
+    {["B"]=0, ["G"]=0, ["R"]=1},
+    {["B"]=0, ["G"]=0.1, ["R"]=0.9},
+    {["B"]=0, ["G"]=0.2, ["R"]=0.8},
+    {["B"]=0, ["G"]=0.3, ["R"]=0.7},
+    {["B"]=0, ["G"]=0.5, ["R"]=1},
+    {["B"]=0, ["G"]=0.6, ["R"]=1},
+    {["B"]=0, ["G"]=1, ["R"]=1},
+    {["B"]=0, ["G"]=0.9, ["R"]=0.8},
+    {["B"]=0, ["G"]=0.8, ["R"]=0.5},
+    {["B"]=0, ["G"]=1, ["R"]=0},
+    {["B"]=0.6, ["G"]=1, ["R"]=0.5},
+    {["B"]=1, ["G"]=1, ["R"]=0.5},
+    {["B"]=1, ["G"]=0.7, ["R"]=0.5},
+    {["B"]=1, ["G"]=0, ["R"]=0},
+    {["B"]=0.8, ["G"]=0, ["R"]=0.5},
+    {["B"]=0.5, ["G"]=0, ["R"]=0.5},
+    {["B"]=0.6, ["G"]=0, ["R"]=0.8},
+    {["B"]=1, ["G"]=0, ["R"]=1},
+    {["B"]=1, ["G"]=0.5, ["R"]=1}
+}
+
+-- all items grouped for organization
+local items = {
+    "Hatp","Hats","Hato","Capep","Capes","Capeo",
+    "SleeveHandp1","SleeveHands1","SleeveHando1",
+    "SleeveHandp","SleeveShoulderp","SleeveShoulderp1",
+    "SleeveShoulders","SleeveShoulders1","SleeveHands","SleeveHands1",
+    "SleeveShouldero","SleeveHando","SleeveShouldero1","SleeveHando1",
+    "JacketBotp","JacketBots","JacketBoto",
+    "JacketTopp","JacketTops","JacketTopo",
+    "Shoep","Shoep1","Shoes","Shoes1","Shoeo","Shoeo1",
+    "Eyebrowsp","Eyebrowsp1","Eyebrowso","Eyebrowso1",
+    "Propo","Prope","Props","Propp",
+    "PantsThighp","PantsCalfp1","PantsThighp1","PantsCalfp",
+    "PantsThigho","PantsCalfo","PantsThigho1","PantsCalfo1",
+    "Righteyei","Lefteyei","Lefteyew","Righteyemh","Righteyew",
+    "Lefteyemh","Lefteyeb","Righteyeb",
+    "Front_Hairp","Rear_Hairp","Back_Hairo","Front_Hairo",
+    "Rear_Hairo","Rear_Hairs","Front_Hairs","Back_Hairp",
+    "Back_Hairs","Back_Haire", -- ✅ added
+    "Moutho",
+    "Shirtp","ShirtBotp","Shirts","ShirtBots","Shirto","Shirtboto"
+}
+
+-- toggle state
+local rainbowEnabled = true
+
+-- function to set everything to black
+local function setAllBlack()
+    local black = {["R"] = 0, ["G"] = 0, ["B"] = 0}
+
+    -- all outfit items
+    for _, partName in ipairs(items) do
+        ServerUpdateColor:FireServer(partName, black)
+    end
+
+    -- skin + outline
+    ServerChangeSkinColor:FireServer(black)
+    ServerChangeSkinColor:FireServer(black, true)
+end
+
+-- function for rainbow cycling
+local function startRainbow(partName)
+    task.spawn(function()
+        local index = 1
+        while true do
+            if rainbowEnabled then
+                local color = colors[index]
+                ServerUpdateColor:FireServer(partName, color)
+                index += 1
+                if index > #colors then
+                    index = 1
+                end
+            end
+            task.wait(0.1)
+        end
+    end)
+end
+
+-- skin colors
+local function startRainbowSkin()
+    task.spawn(function()
+        local index = 1
+        while true do
+            if rainbowEnabled then
+                local color = colors[index]
+                ServerChangeSkinColor:FireServer(color)
+                index += 1
+                if index > #colors then
+                    index = 1
+                end
+            end
+            task.wait(0.1)
+        end
+    end)
+end
+
+local function startRainbowSkinOutline()
+    task.spawn(function()
+        local index = 1
+        while true do
+            if rainbowEnabled then
+                local color = colors[index]
+                ServerChangeSkinColor:FireServer(color, true)
+                index += 1
+                if index > #colors then
+                    index = 1
+                end
+            end
+            task.wait(0.1)
+        end
+    end)
+end
+
+-- shuffle helper
+local function shuffle(t)
+    local n = #t
+    for i = n, 2, -1 do
+        local j = math.random(i)
+        t[i], t[j] = t[j], t[i]
+    end
+end
+
+-- launch everything
+local all = {}
+for _, v in ipairs(items) do
+    table.insert(all, function() startRainbow(v) end)
+end
+table.insert(all, startRainbowSkin)
+table.insert(all, startRainbowSkinOutline)
+
+shuffle(all)
+
+task.spawn(function()
+    for _, fn in ipairs(all) do
+        fn()
+        task.wait(0.2)
+    end
+end)
+
+-- GUI button in top right
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "RainbowToggleGUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = PlayerGui
+
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 40, 0, 15) -- 3x smaller
+button.Position = UDim2.new(1, -50, 0, 10)
+button.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.Font = Enum.Font.SourceSansBold
+button.TextSize = 10
+button.Text = "Stop"
+button.Parent = screenGui
+
+button.MouseButton1Click:Connect(function()
+    rainbowEnabled = not rainbowEnabled
+    if rainbowEnabled then
+        button.Text = "Stop"
+        button.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+    else
+        button.Text = "Start"
+        button.BackgroundColor3 = Color3.fromRGB(150, 50, 50)
+        setAllBlack() -- instantly reset all to black
+    end
+end)
